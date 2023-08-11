@@ -1,0 +1,85 @@
+1.
+from news.models import User
+user1 = User.objects.create_user('Anton')
+user2 = User.objects.create_user('Egor')
+
+2.
+from news.models import Author
+author1 = Author.objects.create(user = user1)
+author2 = Author.objects.create(user = user2)
+
+author1 = Author.objects.get(id = 1)
+author2 = Author.objects.get(id =2)
+
+3.
+from news.models import Category
+category1 = Category.objects.create(category = 'IT')
+category2 = Category.objects.create(category = 'Crypto')
+category3 = Category.objects.create(category = 'Economy')
+category4 = Category.objects.create(category = 'Stars')
+
+category1 = Category.objects.get(id = 1)
+category2 = Category.objects.get(id = 2)
+category3 = Category.objects.get(id = 3)
+category4 = Category.objects.get(id = 4)
+
+4.
+from news.models import Post
+article1 = Post.objects.create(author_id = 1, choice='AR', head='#1 article', text='1 article post')
+article2 = Post.objects.create(author_id = 2, choice='AR', head='#2 article', text='2 article post')
+news1 = Post.objects.create(author_id = 1, choice='NE', head='#1 news head', text='1 news post')
+
+article1 = Post.objects.get(id = 1)
+article2 = Post.objects.get(id = 2)
+news1 = Post.objects.get(id = 3)
+
+5.
+article1.category.add(category1)
+article1.category.add(category4)
+article2.category.add(category2)
+article2.category.add(category3)
+news1.category.add(category2)
+news1.category.add(category4)
+
+6.
+from news.models import Comment
+comment1 = Comment.objects.create(post_comm_id= 1, user_comm_id= 1, text_comm='#1 text comment')
+comment2 = Comment.objects.create(post_comm_id= 2, user_comm_id= 2, text_comm='#2 text comment')
+comment3 = Comment.objects.create(post_comm_id= 3, user_comm_id= 2, text_comm='#3 text comment')
+comment4 = Comment.objects.create(post_comm_id= 2, user_comm_id= 1, text_comm='#4 text comment')
+
+comment1 = Comment.objects.get(id=1)
+comment2 = Comment.objects.get(id=2)
+comment3 = Comment.objects.get(id=3)
+comment4 = Comment.objects.get(id=4)
+
+7.
+comment1.like_comm()
+comment2.like_comm()
+comment3.like_comm()
+comment4.like_comm()
+comment1.like_comm()
+comment1.like_comm()
+comment2.like_comm()
+comment3.like_comm()
+comment4.like_comm()
+comment4.like_comm()
+comment4.like_comm()
+comment4.like_comm()
+comment1.dislike_comm()
+comment2.dislike_comm()
+comment3.dislike_comm()
+comment4.dislike_comm()
+article1.like_post()
+article1.like_post()
+article1.like_post()
+article1.like_post()
+article2.like_post()
+article2.like_post()
+news1.like_post()
+news1.like_post()
+news1.like_post()
+news1.dislike_post()
+article2.dislike_post()
+
+8.

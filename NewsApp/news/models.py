@@ -8,12 +8,12 @@ from django.db.models import Sum
 
 class Author(models.Model):
     rating = models.SmallIntegerField(default=0)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def update_rating(self):
-        posts_rating = Post.objects.filter(author=self).aggregate(result=Sum('rating')).get('result')
-        comments_rating = Comment.objects.filter(user=self.user).aggregate(result=Sum('rating')).get('result')
-        comment_post = Comment.objects.filter(post__author__user=self.user).aggregate(result=Sum('rating')).get('result')
+        posts_rating = Post.objects.filter(author=self).aggregate(result=Sum('rating_news')).get('result')
+        comments_rating = Comment.objects.filter(user=self.user).aggregate(result=Sum('rating_comm')).get('result')
+        comment_post = Comment.objects.filter(post__author__user=self.user).aggregate(result=Sum('rating_comm')).get('result')
 
         self.rating = 3 * posts_rating + comments_rating + comment_post
         self.save()
@@ -34,7 +34,7 @@ POST_TYPES = [
 
 
 class Post(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE,primary_key=False)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
     choice = models.CharField(max_length=10, choices=[(news, "новость"),(article, "статья")])
     article_date = models.DateTimeField(auto_now_add=True)
     category = models.ManyToManyField(Category, through="PostCategory")
@@ -44,14 +44,14 @@ class Post(models.Model):
 
     def like_post(self):
         self.rating_news += 1
-        return self.rating_news
+        self.save()
 
     def dislike_post(self):
         self.rating_news -= 1
-        return self.rating_news
+        self.save()
 
-    def preview(self):
-       return self.text[0:124]
+    def preview(self, length=124):
+        return f"{self.text[:length]}..." if len(self.text) > length else self.text
 
 
 
@@ -69,10 +69,9 @@ class Comment(models.Model):
 
     def like_comm(self):
         self.rating_comm += 1
-        return self.rating_comm
+        self.save()
 
     def dislike_comm(self):
         self.rating_comm -= 1
-        return self.rating_comm
-
+        self.save()
 
