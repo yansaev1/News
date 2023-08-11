@@ -12,8 +12,8 @@ class Author(models.Model):
 
     def update_rating(self):
         posts_rating = Post.objects.filter(author=self).aggregate(result=Sum('rating_news')).get('result')
-        comments_rating = Comment.objects.filter(user=self.user).aggregate(result=Sum('rating_comm')).get('result')
-        comment_post = Comment.objects.filter(post__author__user=self.user).aggregate(result=Sum('rating_comm')).get('result')
+        comments_rating = Comment.objects.filter(user_comm=self.user).aggregate(result=Sum('rating_comm')).get('result')
+        comment_post = Comment.objects.filter(post_comm__author=self).aggregate(result=Sum('rating_comm')).get('result')
 
         self.rating = 3 * posts_rating + comments_rating + comment_post
         self.save()
@@ -74,4 +74,5 @@ class Comment(models.Model):
     def dislike_comm(self):
         self.rating_comm -= 1
         self.save()
+
 

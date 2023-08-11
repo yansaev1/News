@@ -83,3 +83,15 @@ news1.dislike_post()
 article2.dislike_post()
 
 8.
+author1.update_rating()
+author2.update_rating()
+
+9.
+top = Author.objects.all().order_by('-rating').values('user', 'rating')[0]
+print(top)
+
+10.
+Post.objects.all().order_by('-rating_news').values('article_date', 'author__user__username', 'rating_news', 'head', 'text')[0]
+
+11.
+Comment.objects.all().order_by().values('date_comm', 'user_comm__username', 'rating_comm', 'text_comm')[0]
