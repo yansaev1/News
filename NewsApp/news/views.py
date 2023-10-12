@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.views.generic import TemplateView
 from .models import Post
 from datetime import datetime
 from .filters import PostFilter
@@ -56,10 +58,12 @@ class PostUpdate(UpdateView):
     model = Post
     template_name = 'post_edit.html'
 
-class ArticleUpdate(UpdateView):
+
+class ArticleUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'article_edit.html'
+
 
 class PostDelete(DeleteView):
     model = Post
@@ -70,3 +74,4 @@ class ArticleDelete(DeleteView):
     model = Post
     template_name = 'article_delete.html'
     success_url = reverse_lazy('post_list')
+
